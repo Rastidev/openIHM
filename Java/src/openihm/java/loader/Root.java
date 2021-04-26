@@ -1,5 +1,8 @@
 package openihm.java.loader;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import openihm.main.Main;
 
 public class Root extends Object{
@@ -12,6 +15,17 @@ public class Root extends Object{
 		System.out.println("Program finish with " + out);
 		if(out == SUCCESS) System.out.println("no problem found");
 		else System.out.println("probleme found");
+	}
+	
+	private static final List<Root> RootLoad = new ArrayList<>();
+	
+	public final int getId() {
+		return RootLoad.indexOf(this);
+	}
+	
+	private Root(final String[] args) {
+		RootLoad.add(this);
+		this.args = args;
 	}
 	
 	private final String[] args;
@@ -32,10 +46,6 @@ public class Root extends Object{
 	
 	public final String[] getArgs() {
 		return args;
-	}
-	
-	private Root(final String[] args) {
-		this.args = args;
 	}
 
 }
