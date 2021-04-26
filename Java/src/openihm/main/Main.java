@@ -11,6 +11,6 @@ public final class Main {
 	
 	public int main() {
 		System.out.println("Hello World !");
-		return Root.SUCCESS;
+		return Root.NOTHING;
 	}
 }
