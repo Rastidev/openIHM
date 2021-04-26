@@ -9,8 +9,8 @@ public final class Main {
 	
 	private final Root root;
 	
-	public int main(final String[] args, final int launchRoot) {
+	public int main() {
 		System.out.println("Hello World !");
-		return 0;
+		return Root.SUCCESS;
 	}
 }
