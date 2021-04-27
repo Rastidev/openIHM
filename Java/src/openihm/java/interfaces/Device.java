@@ -1,7 +1,10 @@
 package openihm.java.interfaces;
 
 public enum Device {
+	//inconnue
 	UNKNOWN(),
+	//ordinateur Windows MacOs Linux
 	COMPUTER(),
-	ANDROID_PHONE();
+	//portable en ios ou android
+	PHONE();
 }
