@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JRootPane;
 
 import openihm.java.interfaces.Arguments;
 import openihm.java.interfaces.Context;
@@ -28,6 +29,8 @@ public class Root extends Object implements Context, Arguments, Window{
 	
 	private Root(final String[] args) {
 		RootLoad.add(this);
+		RootFrame frame = new RootFrame(this); 
+		this.window = initJFrame(frame);
 		this.args = args;
 	}
 	
@@ -78,8 +81,7 @@ public class Root extends Object implements Context, Arguments, Window{
 	
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static JFrame initJFrame() {
-		final JFrame window = new JFrame();
+	private static JFrame initJFrame(final JFrame window) {
 		window.setTitle("openIHM");
 		window.setVisible(false);
 		window.setAlwaysOnTop(false);
@@ -89,7 +91,7 @@ public class Root extends Object implements Context, Arguments, Window{
 		return window;
 	}
 	
-	private final JFrame window = initJFrame();
+	private final JFrame window;
 
 	@Override
 	public final void setTitle(final String title) { window.setTitle(title); }
