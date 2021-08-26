@@ -1,11 +1,11 @@
-package openihm.java.interfaces;
+package openihm.interfaces;
 
 public interface Arguments {
 	/*
 	 * renvoie @String l'argument numero $ind
 	 * $ind le numero de l'argument
 	 */
-	public String getArg(final int ind);
+	public char[] getArg(final int ind);
 	
 	/*
 	 * renvoie @boolean:true s'il existe l'argument numero $ind 
@@ -21,5 +21,5 @@ public interface Arguments {
 	/*
 	 * renvoie @String[] tout les arguments
 	 */
-	public String[] getArgs();
+	public char[][] getArgs();
 }

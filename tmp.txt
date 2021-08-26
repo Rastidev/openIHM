@@ -1,0 +1,44 @@
+	private List<Integer> listColor = null;
+	private List<List<Integer>> listPixelLocationX = null;
+	private List<List<Integer>> listPixelLocationY = null;
+	private List<Integer> lastListPixelLocationX = null;
+	private List<Integer> lastListPixelLocationY = null;
+	
+	@Override
+	public void setPenColor(final int rgb) {
+		listColor.add(rgb);
+		lastListPixelLocationX = new ArrayList<>();
+		lastListPixelLocationY = new ArrayList<>();
+		listPixelLocationX.add(lastListPixelLocationX);
+		listPixelLocationY.add(lastListPixelLocationY);
+	}
+
+	@Override
+	public int getPenColor() { return listColor.get(listColor.size() - 1); }
+
+	@Override
+	public void drawPixel(final int x, final int y) { 
+		lastListPixelLocationX.add(x); 
+		lastListPixelLocationY.add(y);
+	}
+
+	@Override
+	public int getColorPixel(final int x, final int y) { return graphics[x][y]; }
+	
+
+	@Override
+	public void update() {
+		for(int i = 0; i < listColor.size(); i += 1)
+			for(int[] loc: listPixelLocation.get(i)) graphics[loc[0]][loc[1]] = listColor.get(i);
+		resetDraw();
+	}
+
+	@Override
+	public void resetDraw() {
+		listColor = new ArrayList<>();
+		listPixelLocationX = new ArrayList<>();
+		listPixelLocationY = new ArrayList<>();
+		lastListPixelLocationX = null;
+		lastListPixelLocationY = null;
+		System.out.println("resetDraw");
+	}
