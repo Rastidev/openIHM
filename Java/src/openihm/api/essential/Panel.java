@@ -6,7 +6,7 @@ import openihm.api.graphics.Shape;
 import openihm.api.utils.Matrice;
 import openihm.interfaces.Graphics;
 
-class Panel implements Drawable{
+public class Panel implements Drawable{
 	
 	private final Graphics g;
 	

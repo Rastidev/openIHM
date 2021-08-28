@@ -5,6 +5,10 @@ import openihm.api.essential.Stage;
 import openihm.api.graphics.Graphics;
 import openihm.api.graphics.Image;
 import openihm.api.graphics.Shape;
+import openihm.api.system.System;
+import openihm.api.utils.String;
+import openihm.interfaces.FileSystem;
+import openihm.interfaces.Root;
 
 final class MyClass extends Launcher{
 	
@@ -12,7 +16,7 @@ final class MyClass extends Launcher{
 
 	@Override
 	public void start(Stage stage) {
-		Graphics g = new Graphics();
+		/* Graphics g = new Graphics();
 		Shape shape = new Shape() {
 			
 			@Override
@@ -40,7 +44,14 @@ final class MyClass extends Launcher{
 				v[i][j] =  stage.getRoot().rand();
 			}
 		stage.getPanel().drawImage(img, 0, 0, 200, 200);
-		stage.setVisible(true);
+		stage.setVisible(true); */
+		FileSystem fs = stage.getRoot();
+		String paths = String.$("test.txt");
+		if(fs.fileExist(paths.getValue(), paths.size(), FileSystem.WINDOWS_FILE)) {
+			System.cout.$(String.$("test.txt exist")).endl();
+			System.cout.$(String.$(new java.lang.String(fs.getFile(paths.getValue(), paths.size(), FileSystem.WINDOWS_FILE))));
+		}
+		else System.cerr.$(String.$("test.txt no found"));
 	}
 
 }

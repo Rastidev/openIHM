@@ -3,46 +3,18 @@ package openihm.interfaces;
 public interface Window {
 	
 	
-	//nombre de methode: 14;
-	public static final int SET_TITLE = 2;
-	public static final int SET_VISIBLE = 3;
-	public static final int SET_ALWAYS_ON_TOP = 4;
-	public static final int SET_SIZE = 5;
-	public static final int GET_WIDTH = 6;
-	public static final int GET_HEIGHT = 7;
-	public static final int SET_LOCALISATION = 8;
-	public static final int GET_X = 9;
-	public static final int GET_Y = 10;
-	public static final int SET_RESIZABLE = 11;
+	public static final int NUMBER_METHODES = 10;
 	
-	
-	
-	
-	/*
-	 * renvoie @boolean[] le tableau des méthodes disponibles de @Window
-	 * $context @Context
-	 */ 
-	static boolean[] existList(final Context context) {
-		final int existTabLenght = 12;
-		boolean[] tab = new boolean[existTabLenght];
-		final int[] config_one_device = {Device.COMPUTER};
-		final int config_one_deviceLength = 1;
-		final int[] config_one_version_language = {VersionLanguage.JAVA_8};
-		final int config_one_version_languageLength = 1;
-		final boolean config_one = Context.exist(context, config_one_device, config_one_deviceLength, config_one_version_language, config_one_version_languageLength);
-		tab[SET_TITLE] = config_one;
-		tab[SET_VISIBLE] = config_one;
-		tab[SET_ALWAYS_ON_TOP] = config_one;
-		tab[SET_SIZE] = config_one;
-		tab[GET_WIDTH] = config_one;
-		tab[GET_HEIGHT] = config_one;
-		tab[SET_LOCALISATION] = config_one;
-		tab[GET_X] = config_one;
-		tab[GET_Y] = config_one;
-		tab[SET_RESIZABLE] = config_one;
-		Context.finishConfigTabExist(tab, existTabLenght);
-		return tab;
-	}
+	public static final int SET_TITLE = 0;
+	public static final int SET_VISIBLE = 1;
+	public static final int SET_ALWAYS_ON_TOP = 2;
+	public static final int SET_SIZE = 3;
+	public static final int GET_WIDTH = 4;
+	public static final int GET_HEIGHT = 5;
+	public static final int SET_LOCALISATION = 6;
+	public static final int GET_X = 7;
+	public static final int GET_Y = 8;
+	public static final int SET_RESIZABLE = 9;
 	
 	/*
 	 * met un nom à la fenetre
@@ -75,7 +47,7 @@ public interface Window {
 	public abstract int getWindowWidth();
 	
 	/*
-	 * renvoie @int la taille horizontale de la fenetre
+	 * renvoie @int la taille verticale de la fenetre
 	 */
 	public abstract int getWindowHeight();
 	

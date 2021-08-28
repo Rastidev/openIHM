@@ -8,6 +8,12 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -19,14 +25,17 @@ import openihm.interfaces.EventMousePressed;
 import openihm.interfaces.EventMouseReleased;
 import openihm.interfaces.EventMouseScroll;
 import openihm.interfaces.FileSystem;
+import openihm.interfaces.Mouse;
 import openihm.interfaces.Root;
 import openihm.interfaces.Stream;
 import openihm.interfaces.VersionLanguage;
+import openihm.interfaces.Window;
 
 public class RootloaderComputerJava8 extends Root{
 	
 	RootloaderComputerJava8(final char[][] args) {
 		super(args, Device.COMPUTER, VersionLanguage.JAVA_8);
+		this.exist = getExist();
 		window = new JFrame("openIHM");
 		window.setContentPane( new JPanel() {
 			private static final long serialVersionUID = 1L;
@@ -41,7 +50,7 @@ public class RootloaderComputerJava8 extends Root{
 		window.setSize(800, 600);
 		window.setLocation(0, 0);
 		window.setResizable(true);
-		window.setUndecorated(false);
+		window.setUndecorated(true);
 		graphicsImage = new BufferedImage(getWindowWidth(), getWindowHeight(), BufferedImage.TYPE_INT_RGB);
 		clearGraphics();
 		window.repaint();
@@ -87,9 +96,38 @@ public class RootloaderComputerJava8 extends Root{
 		this.mouseScroll = new EventMouseScroll() {public void action(int scroll) {}};
 		random = new Random();
 	}
+	
+	 private final static boolean[][] getExist(){
+		final boolean[][] tab = new boolean[NUMBER_INTERFACES][];
+		tab[WINDOW] = existMethodesWindow();
+		tab[MOUSE] = existMethodesMouse();
+		return tab;
+	}
+	
+	private final boolean[][] exist;
+	@Override
+	public boolean exist(final int Interface, final int Methode) { return exist[Interface][Methode]; }
 		
 	
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/*
+	 * renvoie @boolean[] le tableau des méthodes disponibles de @Window
+	 */ 
+	private static boolean[] existMethodesWindow() {
+		boolean[] tab = new boolean[Window.NUMBER_METHODES];
+		tab[SET_TITLE] = true;
+		tab[SET_VISIBLE] = true;
+		tab[SET_ALWAYS_ON_TOP] = true;
+		tab[SET_SIZE] = true;
+		tab[GET_WIDTH] = true;
+		tab[GET_HEIGHT] = true;
+		tab[SET_LOCALISATION] = true;
+		tab[GET_X] = true;
+		tab[GET_Y] = true;
+		tab[SET_RESIZABLE] = true;
+		return tab;
+	}
 	
 	private final JFrame window;
 
@@ -136,6 +174,19 @@ public class RootloaderComputerJava8 extends Root{
 	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	
+	/*
+	 * renvoie @boolean[] le tableau des méthodes disponibles de @Mouse
+	 */
+	private static boolean[] existMethodesMouse() {
+		boolean[] tab = new boolean[Mouse.NUMBER_METHODES];
+		tab[SET_RELEASE] = true;
+		tab[SET_PRESSED] = true;
+		tab[SET_MOVED] = true;
+		tab[SET_SCROLL] = true;
+		return tab;
+	}
+	
 	private EventMouseReleased mouseReleased;
 	
 	@Override
@@ -178,6 +229,12 @@ public class RootloaderComputerJava8 extends Root{
 
 	@Override
 	public void update() { window.repaint(); }
+	
+	@Override
+	public int getGraphicsWidth() { return graphicsImage.getWidth(); }
+
+	@Override
+	public int getGraphicsHeight() { return graphicsImage.getHeight(); }
 	
 	
 	private void clearGraphics() {
@@ -238,12 +295,12 @@ public class RootloaderComputerJava8 extends Root{
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	
-	private File getJavaFile(final char[] paths, final int pathsType) {
+	private InputStream getReaderJavaFile(final char[] paths, final int pathsType) throws FileNotFoundException {
 		switch(pathsType) {
 		case FileSystem.INTERN_FILE:
 			return null;
 		case FileSystem.WINDOWS_FILE:
-			return null;
+			return new FileInputStream(new File(new String(paths)));
 		default:
 			return null;
 		}
@@ -257,8 +314,19 @@ public class RootloaderComputerJava8 extends Root{
 
 	@Override
 	public char[] getFile(final char[] paths, final int pathsSize, final int pathsType) {
-		// TODO Auto-generated method stub
+		try {
+			List<Integer> value = new ArrayList<>();
+			InputStream ifs = getReaderJavaFile(paths, pathsType);
+			for(int i = ifs.read(); i > 0; i = ifs.read()) value.add(i);
+			ifs.close();
+			char[] out = new char[value.size()];
+			for(int i = 0; i < out.length; ++i) out[i] = (char)((int)value.get(i));
+			return out;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return null;
+		
 	}
 
 	@Override

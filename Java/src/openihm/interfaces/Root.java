@@ -1,8 +1,5 @@
 package openihm.interfaces;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public abstract class Root implements Context, Arguments, Window, Mouse, Graphics, System, FileSystem{
 	
 	public static final int SUCCESS = 0;
@@ -12,7 +9,6 @@ public abstract class Root implements Context, Arguments, Window, Mouse, Graphic
 		this.args = args;
 		this.device = device;
 		this.version_language = version_language;
-		this.exist = Context.getExist(this);
 	}
 	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,21 +42,16 @@ public abstract class Root implements Context, Arguments, Window, Mouse, Graphic
 	private final int device;
 	private final int version_language;
 	
-	private final boolean[][] exist;
-	
-	private static final List<Root> RootLoad = new ArrayList<>();
+//	private static final List<Root> RootLoad = new ArrayList<>();
 	
 	@Override
-	public final int getId() { return RootLoad.indexOf(this); }
+	public final int getId() { return -1; }
 	
 	@Override
 	public final int getVersionLanguage() { return version_language; }
 	
 	@Override
 	public final int getDevice() { return device; }
-	
-	@Override
-	public boolean exist(final int Interface, final int Methode) { return exist[Interface][Methode]; }
 	
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

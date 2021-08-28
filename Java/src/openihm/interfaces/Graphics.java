@@ -15,4 +15,14 @@ public interface Graphics {
 	 * met à jour le graphics sur la fenetre
 	 */
 	public void update();
+	
+	/*
+	 * renvoie @int la taille horizontale du graphique
+	 */
+	public int getGraphicsWidth();
+	
+	/*
+	 * renvoie @int la taille verticale du graphique
+	 */
+	public int getGraphicsHeight();
 }

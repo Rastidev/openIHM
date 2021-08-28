@@ -22,7 +22,7 @@ public class Stage {
 	
 	public Stage(final Root root) {
 		this.root = root;
-		if(root.exist(Context.WINDOW , Context.THIS)) {
+		if(root.exist(Context.WINDOW , 0)) {
 			panel = new Panel(root, root.getWindowWidth(), root.getWindowHeight());
 			if(root.exist(Context.WINDOW, Window.SET_VISIBLE)) root.setWindowVisible(isVisible);
 			if(root.exist(Context.WINDOW, Window.SET_ALWAYS_ON_TOP)) root.setWindowAlwaysOnTop(isAlwaysOnTop);
@@ -141,6 +141,6 @@ public class Stage {
 	/*
 	 * renvoie @Drawable le graphics du Stage
 	 */
-	public Drawable getPanel() { return panel; }
+	public Panel getPanel() { return panel; }
 
 }
