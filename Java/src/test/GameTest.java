@@ -230,6 +230,7 @@ public final class GameTest extends Main{
 				root.update();
 			}
 		});
+		root.update();
 		return Root.NOTHING;
 		
 		
