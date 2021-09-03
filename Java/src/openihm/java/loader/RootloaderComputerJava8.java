@@ -317,7 +317,7 @@ public class RootloaderComputerJava8 extends Root{
 		try {
 			List<Integer> value = new ArrayList<>();
 			InputStream ifs = getReaderJavaFile(paths, pathsType);
-			for(int i = ifs.read(); i > 0; i = ifs.read()) value.add(i);
+			for(int i = ifs.read(); ifs.available() != 0; i = ifs.read()) value.add(i);
 			ifs.close();
 			char[] out = new char[value.size()];
 			for(int i = 0; i < out.length; ++i) out[i] = (char)((int)value.get(i));
