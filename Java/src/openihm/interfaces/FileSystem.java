@@ -8,7 +8,5 @@ public interface FileSystem {
 
 	public abstract Stream openFile(final char[] paths, final int pathsSize, final int pathsType);
 	
-	public abstract char[] getFile(final char[] paths, final int pathsSize, final int pathsType);
-	
 	public abstract boolean fileExist(final char[] paths, final int pathsSize, final int pathsType);
 }

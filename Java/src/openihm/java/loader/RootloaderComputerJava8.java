@@ -9,11 +9,8 @@ import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -252,7 +249,7 @@ public class RootloaderComputerJava8 extends Root{
 	public static char[][] readArgs(final Object[] Vstr) {
 		final char[][] Args = new char[Vstr.length][];
 		for(int i = 0; i < Args.length; i++) {
-			final String str = (String) Vstr[i];
+			final String str = Vstr[i].toString();
 			final char[] Arg = new char[str.length()];
 			for(int j = 0; j < Arg.length; j++) Arg[j] = str.charAt(j);
 			Args[i] = Arg;
@@ -293,40 +290,80 @@ public class RootloaderComputerJava8 extends Root{
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	
-	private InputStream getReaderJavaFile(final char[] paths, final int pathsType) throws FileNotFoundException {
-		switch(pathsType) {
-		case FileSystem.INTERN_FILE:
-			return null;
-		case FileSystem.WINDOWS_FILE:
-			return new FileInputStream(new File(new String(paths)));
-		default:
-			return null;
-		}
-	}
 
 	@Override
 	public Stream openFile(final char[] paths, final int pathsSize, final int pathsType) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public char[] getFile(final char[] paths, final int pathsSize, final int pathsType) {
-		try {
-			List<Integer> value = new ArrayList<>();
-			InputStream ifs = getReaderJavaFile(paths, pathsType);
-			for(int i = ifs.read(); ifs.available() != 0; i = ifs.read()) value.add(i);
-			ifs.close();
-			char[] out = new char[value.size()];
-			for(int i = 0; i < out.length; ++i) out[i] = (char)((int)value.get(i));
-			return out;
-		} catch (IOException e) {
-			e.printStackTrace();
+		Stream out = null;
+		switch(pathsType) {
+		case FileSystem.INTERN_FILE:
+			out = null;
+			break;
+		case FileSystem.WINDOWS_FILE:
+			out = getStreamWindowsFile(paths, pathsSize);
+			break;
+		default:
+			out = new Stream() {
+				@Override public boolean write(char c) {return false;}
+				@Override public char read() {return 0;}
+				@Override public boolean getCursorPosition(long pos) {return false;}
+				@Override public int getState() { return TYPENOFOUND; }
+				@Override public boolean close() {return false;}
+			};
 		}
+		if(out == null)	return new Stream() {
+			@Override public boolean write(char c) {return false;}
+			@Override public char read() {return 0;}
+			@Override public boolean getCursorPosition(long pos) {return false;}
+			@Override public int getState() { return ERROR; }
+			@Override public boolean close() {return false;}
+		};
+		return out;
+	}
+	
+	private Stream getStreamWindowsFile(final char[] paths, final int pathsSize) {
+		try {
+			final InputStream ifs = new FileInputStream(new File(new String(paths)));
+			return new Stream() {
+				
+				private int error = 0;
+				
+				@Override
+				public boolean write(char c) {return false;}
+				
+				@Override
+				public char read() {try {
+					return (char) ifs.read();
+				} catch (IOException e) {error = READERROR; return 0;}}
+				
+				@Override
+				public int getState() {
+					if(error != 0) return error;
+					try { if(ifs.available() != 0) return GOOD; } 
+					catch (IOException e) { return ERROR; }
+					return ENDSTREAM;
+				}
+				
+				@Override
+				public boolean getCursorPosition(long pos) {
+					try {
+						ifs.reset();
+						ifs.skip(pathsSize);
+					} catch (IOException e) {
+						error = CURSORERROR;
+						return false;
+					}
+					return true;
+				}
+
+				@Override
+				public boolean close() { 
+					try {ifs.close();} 
+					catch (IOException e) {error = CLOSEERROR; return false;} 
+					return true; 
+				}
+			};
+		} catch (IOException e) {}
 		return null;
-		
 	}
 
 	@Override

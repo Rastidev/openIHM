@@ -1,21 +1,37 @@
 package openihm.api.graphics;
 
-import openihm.api.utils.BasicList;
-import openihm.api.utils.Iterator;
-import openihm.api.utils.List;
-
-public class Graphics extends Shape{
+public abstract class Graphics {
 	
-	private final List<Shape> listShape = new BasicList<>();
-
-	@Override
-	public void draw() {
-		for(final Iterator<Shape> it = listShape.iterator();!it.isEnd(); it.next())
-			drawShape(it.get(), 0, 0, 1, 1);
+	private Drawable g;
+	private int x;
+	private int y;
+	private int width;
+	private int height;
+	
+	
+	
+	public void draw(final Drawable g, final int x, final int y, final int width, final int height) {
+		this.g = g;
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		draw();
 	}
 	
-	public void clear() { listShape.resize(0); }
-	
-	public void addShape(final Shape shape) { listShape.add(shape); }
+	public abstract void draw();
 
+	
+	public void fillRect(final double x, final double y, final double width, final double height, int color) {
+		g.fillRect((int)(this.x + x * this.width), (int)(this.y + y * this.height), (int)(width * this.width), (int)(height * this.height), color);
+	}
+
+	public void drawGraphics(final Graphics g, final double x, final double y, final double width, final double height) {
+		this.g.drawGraphics(g, (int)(this.x + x * this.width), (int)(this.y + y * this.height), (int)(width * this.width), (int)(height * this.height));
+	}
+	
+	public void drawImage(final Image image, final double x, final double y, final double width, final double height) {
+		g.drawImage(image, (int)(this.x + x * this.width), (int)(this.y + y * this.height), (int)(width * this.width), (int)(height * this.height));
+	}
+	
 }

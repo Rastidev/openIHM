@@ -24,7 +24,7 @@ public final class GameTest extends Main{
 	private static final int color_background_win = 0x00008000;
 	private static final int color_flag = 0x000000ff;
 	
-	private static final int sizeGrid = 10;
+	private static final int sizeGrid = 90;
 	private static final int NumberMine = 10;
 	
 	private static final char NotSee = 'n';

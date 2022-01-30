@@ -2,23 +2,22 @@ package openihm.api.essential;
 
 import openihm.api.graphics.Drawable;
 import openihm.api.graphics.Image;
-import openihm.api.graphics.Shape;
+import openihm.api.graphics.Graphics;
 import openihm.api.utils.Matrice;
-import openihm.interfaces.Graphics;
 
-public class Panel implements Drawable{
+class Panel implements Drawable{
 	
-	private final Graphics g;
+	private final openihm.interfaces.Graphics g;
 	
 	private int width = 0;
 	
 	private int height = 0;
 	
-	public Panel(final Graphics g) {
+	public Panel(final openihm.interfaces.Graphics g) {
 		this.g = g;
 	}
 	
-	public Panel(final Graphics g, final int width, final int height) { 
+	public Panel(final openihm.interfaces.Graphics g, final int width, final int height) { 
 		this(g);
 		if(width < 0) this.width = 0;
 		else this.width = width;
@@ -30,7 +29,7 @@ public class Panel implements Drawable{
 	
 	public int getHeight() { return this.height; }
 	
-	public Graphics getGraphics(){ return g; }
+	public openihm.interfaces.Graphics getGraphics(){ return g; }
 	
 	public void setSize(final int width, final int height) {
 		this.width = width;
@@ -48,13 +47,15 @@ public class Panel implements Drawable{
 		if(maxY > this.height) maxY = this.height;
 		if(x < 0) x = 0;
 		if(y < 0) y = 0;
-		for(int i = x; i < maxX; i += 1)
-			for (int j = y; j < maxY; j += 1)
+		for(int i = x; i < maxX; i++)
+			for (int j = y; j < maxY; j++)
 				g.drawPixel(i, j, color);
 	}
 
 	@Override
-	public void drawShape(final Shape shape, final int x, final int y, final int width, final int height) { shape.draw(this, x , y, width, height); }
+	public void drawGraphics(final Graphics g, final int x, final int y, final int width, final int height) { 
+		g.draw(this, x , y, width, height); 
+	}
 
 	@Override
 	public void fillCustomRect(final Matrice<Integer> matrix, int x, int y) {
@@ -67,8 +68,8 @@ public class Panel implements Drawable{
 		if(x < 0) x = 0;
 		if(y < 0) y = 0;
 		final Integer[][] value = matrix.getArrays();
-		for(int i = x; i < maxX; i += 1)
-			for (int j = y; j < maxY; j += 1)
+		for(int i = x; i < maxX; i++)
+			for (int j = y; j < maxY; j++)
 				g.drawPixel(i, j, value[i][j]);
 	}
 
@@ -84,8 +85,8 @@ public class Panel implements Drawable{
 		final double varX = (double) (image.width()) / width;
 		final double varY = (double) (image.height()) / height;
 		final int[][] value = image.value();
-		for(int i = x; i < maxX; i += 1)
-			for (int j = y; j < maxY; j += 1)
+		for(int i = x; i < maxX; i++)
+			for (int j = y; j < maxY; j++)
 				g.drawPixel(i, j, value[(int) ((i - x) * varX)][(int) ((j - y) * varY)]);
 	}
 	

@@ -30,9 +30,9 @@ public class Image {
 	
 	public int[][] value() { return value; }
 	
-	
 	public static Image readPNG() {
 		return null;
 	}
+
 
 }

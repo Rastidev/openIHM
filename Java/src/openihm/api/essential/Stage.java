@@ -1,10 +1,13 @@
 package openihm.api.essential;
 
-import openihm.interfaces.Context;
+import openihm.interfaces.EventMouseMoved;
+import openihm.interfaces.EventMousePressed;
+import openihm.interfaces.EventMouseReleased;
+import openihm.interfaces.EventMouseScroll;
 import openihm.interfaces.Root;
-import openihm.interfaces.Window;
 import openihm.api.graphics.Drawable;
 import openihm.api.utils.String;
+import openihm.api.view.View;
 
 public class Stage {
 	
@@ -20,21 +23,43 @@ public class Stage {
 	
 	private boolean isResizable = false;
 	
+	private Scene scene;
+	
 	public Stage(final Root root) {
 		this.root = root;
-		if(root.exist(Context.WINDOW , 0)) {
-			panel = new Panel(root, root.getWindowWidth(), root.getWindowHeight());
-			if(root.exist(Context.WINDOW, Window.SET_VISIBLE)) root.setWindowVisible(isVisible);
-			if(root.exist(Context.WINDOW, Window.SET_ALWAYS_ON_TOP)) root.setWindowAlwaysOnTop(isAlwaysOnTop);
-			if(root.exist(Context.WINDOW, Window.SET_RESIZABLE)) root.setWindowResizable(isResizable);
-			if(root.exist(Context.WINDOW, Window.SET_TITLE)) {
-				title = String.$("openIHM_API");
-				root.setWindowTitle(title.getValue(), title.size());
+		panel = new Panel(root, root.getGraphicsWidth(), root.getGraphicsHeight());
+		root.setWindowVisible(isVisible);
+		root.setWindowAlwaysOnTop(isAlwaysOnTop);
+		root.setWindowResizable(isResizable);
+		title = String.$("openIHM_API");
+		root.setWindowTitle(title.getValue(), title.size());
+		///////////////////////////
+		root.setMouseMoved(new EventMouseMoved() {
+			@Override
+			public void action(int x, int y) {
+				scene.eventMoved( (double) x / root.getGraphicsWidth(), (double) y / root.getGraphicsHeight());
 			}
-		}
-		else {
-			panel = null;
-		}
+		});
+		root.setMousePressed(new EventMousePressed() {	
+			@Override
+			public void action(int x, int y, int button) {
+				scene.eventPressed(
+						(double) x / root.getGraphicsWidth(), (double) y / root.getGraphicsHeight(), button);
+			}
+		});
+		root.setMouseReleased(new EventMouseReleased() {
+			@Override
+			public void action(int x, int y, int button) {
+				scene.eventReleased( (double) x / root.getGraphicsWidth(), (double) y / root.getGraphicsHeight(), button);
+				
+			}
+		});
+		root.setMouseScroll(new EventMouseScroll() {
+			@Override
+			public void action(int scroll) {
+				scene.eventScroll((double) scroll / 360);
+			}
+		});
 	}
 	
 	/*
@@ -141,6 +166,30 @@ public class Stage {
 	/*
 	 * renvoie @Drawable le graphics du Stage
 	 */
-	public Panel getPanel() { return panel; }
+	Drawable getPanel() { return panel; }
+	
+	
+	public void update() { 
+		panel.drawGraphics(scene.getView().getGraphics(), 0, 0, getWidth(), getHeight()); 
+		panel.update();
+	}
+	
+	public void setScene(final Scene scene) {
+		if(scene == null) {
+			this.scene = new Scene() {
+				public void setView(final View view) {}
+				@Override void eventScroll(double scroll) {}
+				@Override void eventReleased(double x, double y, int type) {}
+				@Override void eventPressed(double x, double y, int type) {}
+				@Override void eventMoved(double x, double y) {}
+				@Override void eventDragged(double x, double y, int type) {}
+				@Override void eventClick(double x, double y, int type) {}
+			};
+		}
+		else {
+			this.scene = scene;
+			update();
+		}
+	}
 
 }
