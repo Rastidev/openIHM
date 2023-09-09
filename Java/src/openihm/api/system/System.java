@@ -8,8 +8,8 @@ public final class System {
 	
 	static openihm.interfaces.System get = null;
 	
-	public static Ostream cerr = new Cerr();
+	public static OutPrint cerr = new Cerr();
 	
-	public static Ostream cout = new Cout();
+	public static OutPrint cout = new Cout();
 
 }

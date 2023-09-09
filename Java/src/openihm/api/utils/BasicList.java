@@ -1,8 +1,13 @@
 package openihm.api.utils;
 
+import openihm.api.exception.BadIndexListException;
+import openihm.api.exception.NotNaturalNumberException;
+import openihm.api.lang.F;
+import openihm.api.lang.Object;
+import openihm.api.lang.String;
 import openihm.api.system.System;
 
-public class BasicList<T> implements List<T>{
+public class BasicList<T> extends Object implements List<T>{
 	
 	private int size = 0;
 	
@@ -15,7 +20,7 @@ public class BasicList<T> implements List<T>{
 	
 	public BasicList(final int size, final T default_value){
 		if(size < 0) {
-			System.cerr.$(String.$("bad size: size < 0 : size =")).$(size).endl();
+			new NotNaturalNumberException(this, 1, new String("size"), size);
 			this.size = 0;
 		}
 		else if(size > 0) {
@@ -31,19 +36,6 @@ public class BasicList<T> implements List<T>{
 	}
 	
 	public BasicList(final int size) { this(size, null); }
-	
-	private boolean isBadIndex(final int index) {
-		if(index >= size) {
-			System.cerr.$(String.$("bad index : size=")).$(size);
-			System.cerr.$(String.$(" / index=")).$(index).endl();
-			return true;
-		}
-		if(index < 0) {
-			System.cerr.$(String.$("bad index: index < 0 : index =")).$(index).endl();
-			return true;
-		}
-		return false;
-	}
 	
 	@Override
 	public int size() { return size; }
@@ -91,20 +83,29 @@ public class BasicList<T> implements List<T>{
 
 	@Override
 	public T get(int index) {
-		if(isBadIndex(index)) return null;
+		if(index >= size || index < 0) {
+			new BadIndexListException(this, 3, size, index);
+			return null;
+		}
 		return getNode(index).getValue();
 	}
 
 	@Override
 	public boolean set(int index, T e) {
-		if(isBadIndex(index)) return false;
+		if(index >= size || index < 0) {
+			new BadIndexListException(this, 3, size, index);
+			return false;
+		}
 		getNode(index).setValue(e);
 		return true;
 	}
 
 	@Override
 	public boolean insert(int index, T e) {
-		if(isBadIndex(index)) return false;
+		if(index >= size || index < 0) {
+			new BadIndexListException(this, 3, size, index);
+			return false;
+		}
 		if(index == 0) {
 			firstNode = new BasicNode<T>(e, firstNode);
 			if(size == 1) lastNode = firstNode.nextNode();
@@ -119,7 +120,10 @@ public class BasicList<T> implements List<T>{
 
 	@Override
 	public boolean remove(int index) {
-		if(isBadIndex(index)) return false;
+		if(index >= size || index < 0) {
+			new BadIndexListException(this, 3, size, index);
+			return false;
+		}
 		if(index == 0) firstNode = firstNode.nextNode();
 		if(size <= 2) lastNode = firstNode;
 		else {
@@ -134,7 +138,7 @@ public class BasicList<T> implements List<T>{
 	@Override
 	public boolean resize(int size) {
 		if(size < 0) {
-			System.cerr.$(String.$("bad size: size < 0 : size =")).$(size).endl();
+			new NotNaturalNumberException(this, 2, new String("size"), size);
 			return false;
 		}
 		if(size == this.size) return true;
@@ -171,7 +175,7 @@ public class BasicList<T> implements List<T>{
 	@Override
 	public boolean removeLast() {
 		if(size == 0) {
-			System.cerr.$(String.$("error nothing to remove: size = 0"));
+			System.cerr.$(new String("error nothing to remove: size = 0"));
 			return false;
 		}
 		if(size <= 2) {
@@ -190,7 +194,7 @@ public class BasicList<T> implements List<T>{
 	@Override
 	public boolean removeFirst() {
 		if(size == 0) {
-			System.cerr.$(String.$("error nothing to remove: size = 0"));
+			System.cerr.$(new String("error nothing to remove: size = 0"));
 			return false;
 		}
 		if(size <= 2) {
@@ -211,5 +215,7 @@ public class BasicList<T> implements List<T>{
 	public BasicNode<T> getFirstNode(final int index) { return firstNode; }
 	
 	public BasicNode<T> getLastNode(final int index) { return lastNode; }
+	
+	
 
 }

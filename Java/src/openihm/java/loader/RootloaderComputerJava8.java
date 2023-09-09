@@ -30,7 +30,7 @@ import openihm.interfaces.Window;
 
 public class RootloaderComputerJava8 extends Root{
 	
-	RootloaderComputerJava8(final char[][] args) {
+	RootloaderComputerJava8(final byte[][] args) {
 		super(args, Device.COMPUTER, VersionLanguage.JAVA_8);
 		this.exist = getExist();
 		window = new JFrame("openIHM");
@@ -129,7 +129,7 @@ public class RootloaderComputerJava8 extends Root{
 	private final JFrame window;
 
 	@Override
-	public final void setWindowTitle(final char[] title, final int size) { window.setTitle(new String(title)); }
+	public final void setWindowTitle(final byte[] title, final int size) { window.setTitle(new String(title)); }
 
 	@Override
 	public final void setWindowVisible(final boolean b) {
@@ -246,36 +246,25 @@ public class RootloaderComputerJava8 extends Root{
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public static char[][] readArgs(final Object[] Vstr) {
-		final char[][] Args = new char[Vstr.length][];
+	public static byte[][] readArgs(final Object[] Vstr) {
+		final byte[][] Args = new byte[Vstr.length][];
 		for(int i = 0; i < Args.length; i++) {
 			final String str = Vstr[i].toString();
-			final char[] Arg = new char[str.length()];
-			for(int j = 0; j < Arg.length; j++) Arg[j] = str.charAt(j);
+			final byte[] Arg = new byte[str.length()];
+			for(int j = 0; j < Arg.length; j++) Arg[j] = (byte) str.charAt(j);
 			Args[i] = Arg;
 		}
 		return Args;
 	}
 
 	@Override
-	public void print_out(char c) {
-		System.out.print(c);
+	public void print_out(byte c) {
+		System.out.print((char) c);
 	}
 
 	@Override
-	public void print_out(int n) {
-		System.out.print(n);
-		
-	}
-
-	@Override
-	public void print_err(int n) {
-		System.err.print(n);
-	}
-
-	@Override
-	public void print_err(char c) {
-		System.err.print(c);
+	public void print_err(byte c) {
+		System.err.print((char)c);
 	}
 	
 	
@@ -292,32 +281,40 @@ public class RootloaderComputerJava8 extends Root{
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	@Override
-	public Stream openFile(final char[] paths, final int pathsSize, final int pathsType) {
+	public Stream readFile(final byte[] paths, final int pathsSize, final int pathsType) {
 		Stream out = null;
 		switch(pathsType) {
 		case FileSystem.INTERN_FILE:
 			out = null;
 			break;
 		case FileSystem.WINDOWS_FILE:
-			out = getStreamWindowsFile(paths, pathsSize);
+			out = getStreamWindowsFile(charWindow(paths), pathsSize);
 			break;
 		default:
 			out = new Stream() {
-				@Override public boolean write(char c) {return false;}
-				@Override public char read() {return 0;}
-				@Override public boolean getCursorPosition(long pos) {return false;}
+				@Override public boolean write(byte c) {return false;}
+				@Override public byte read() {return 0;}
+				@Override public boolean setCursorPosition(long pos) {return false;}
 				@Override public int getState() { return TYPENOFOUND; }
 				@Override public boolean close() {return false;}
+				@Override public int available() {return ERROR;}
 			};
 		}
 		if(out == null)	return new Stream() {
-			@Override public boolean write(char c) {return false;}
-			@Override public char read() {return 0;}
-			@Override public boolean getCursorPosition(long pos) {return false;}
+			@Override public boolean write(byte c) {return false;}
+			@Override public byte read() {return 0;}
+			@Override public boolean setCursorPosition(long pos) {return false;}
 			@Override public int getState() { return ERROR; }
 			@Override public boolean close() {return false;}
+			@Override public int available() {return ERROR;}
 		};
 		return out;
+	}
+	
+	private static char[] charWindow(final byte[] t) {
+		char[] r = new char[t.length];
+		for(int i = 0; i < t.length; i += 2) r[i] = (char) ( (((int) t[i]) << 8) | t[i + 1] );
+		return r;
 	}
 	
 	private Stream getStreamWindowsFile(final char[] paths, final int pathsSize) {
@@ -328,11 +325,11 @@ public class RootloaderComputerJava8 extends Root{
 				private int error = 0;
 				
 				@Override
-				public boolean write(char c) {return false;}
+				public boolean write(byte c) {return false;}
 				
 				@Override
-				public char read() {try {
-					return (char) ifs.read();
+				public byte read() {try {
+					return (byte) ifs.read();
 				} catch (IOException e) {error = READERROR; return 0;}}
 				
 				@Override
@@ -344,7 +341,7 @@ public class RootloaderComputerJava8 extends Root{
 				}
 				
 				@Override
-				public boolean getCursorPosition(long pos) {
+				public boolean setCursorPosition(long pos) {
 					try {
 						ifs.reset();
 						ifs.skip(pathsSize);
@@ -361,13 +358,34 @@ public class RootloaderComputerJava8 extends Root{
 					catch (IOException e) {error = CLOSEERROR; return false;} 
 					return true; 
 				}
+
+				@Override
+				public int available() {
+					try {  return ifs.available(); } 
+					catch (IOException e) { return ERROR; }
+				}
 			};
 		} catch (IOException e) {}
 		return null;
 	}
 
 	@Override
-	public boolean fileExist(final char[] paths, final int pathsSize, final int pathsType) {
+	public boolean fileExist(final byte[] paths, final int pathsSize, final int pathsType) {
 		return new File(new String(paths)).exists();
+	}
+
+	@Override
+	public boolean canFileExecute(byte[] paths, int pathsSize, int pathsType) {
+		return new File(new String(paths)).canExecute();
+	}
+
+	@Override
+	public boolean canFileRead(byte[] paths, int pathsSize, int pathsType) {
+		return new File(new String(paths)).canRead();
+	}
+
+	@Override
+	public boolean canFileWrite(byte[] paths, int pathsSize, int pathsType) {
+		return new File(new String(paths)).canWrite();
 	}
 }

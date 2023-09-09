@@ -1,8 +1,11 @@
 package openihm.api.utils;
 
+import openihm.api.exception.NotNaturalNumberException;
+import openihm.api.lang.Object;
+import openihm.api.lang.String;
 import openihm.api.system.System;
 
-public class AdvencedList<T> implements List<T>{
+public class AdvencedList<T> extends Object implements List<T>{
 	
 	private int size = 0;
 	
@@ -20,6 +23,10 @@ public class AdvencedList<T> implements List<T>{
 	}
 	
 	public AdvencedList(final int size) {
+		if(size < 0) {
+			new NotNaturalNumberException(this, 1, new String("size"), size);
+			this.size = 0;
+		}
 		this.HEAD = new DoubleNode<>();
 		this.HEAD.setPrevNode(HEAD);
 		this.FOOT = new DoubleNode<>();
@@ -54,7 +61,7 @@ public class AdvencedList<T> implements List<T>{
 	@Override
 	public boolean resize(int size) {
 		if(size < 0) {
-			System.cerr.$(String.$("bad size: size < 0 : size =")).$(size).endl();
+			new NotNaturalNumberException(this, 1, new String("size"), size);
 			return false;
 		}
 		if(size == this.size) return true;
@@ -146,7 +153,7 @@ public class AdvencedList<T> implements List<T>{
 	@Override
 	public boolean removeFirst() {
 		if(size == 0) {
-			System.cerr.$(String.$("error nothing to remove: size = 0"));
+			System.cerr.$(new String("error nothing to remove: size = 0"));
 			return false;
 		}
 		HEAD.nextNode().nextNode().setPrevNode(HEAD);
@@ -158,7 +165,7 @@ public class AdvencedList<T> implements List<T>{
 	@Override
 	public boolean removeLast() {
 		if(size == 0) {
-			System.cerr.$(String.$("error nothing to remove: size = 0"));
+			System.cerr.$(new String("error nothing to remove: size = 0"));
 			return false;
 		}
 		FOOT.prevNode().prevNode().setNextNode(FOOT);
@@ -182,12 +189,12 @@ public class AdvencedList<T> implements List<T>{
 	
 	private boolean isBadIndex(final int index) {
 		if(index >= size) {
-			System.cerr.$(String.$("bad index : size=")).$(size);
-			System.cerr.$(String.$(" / index=")).$(index).endl();
+			System.cerr.$(new String("bad index : size=")).$(size);
+			System.cerr.$(new String(" / index=")).$(index).endl();
 			return true;
 		}
 		if(index < 0) {
-			System.cerr.$(String.$("bad index: index < 0 : index =")).$(index).endl();
+			System.cerr.$(new String("bad index: index < 0 : index =")).$(index).endl();
 			return true;
 		}
 		return false;

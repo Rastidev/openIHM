@@ -1,20 +1,34 @@
 package openihm.api.essential;
 
+import openihm.api.exception.NullPointerException;
 import openihm.api.graphics.Drawable;
 import openihm.api.graphics.Image;
+import openihm.api.lang.F;
+import openihm.api.lang.Object;
+import openihm.api.lang.String;
 import openihm.api.graphics.Graphics;
 import openihm.api.utils.Matrice;
 
-class Panel implements Drawable{
+class Panel extends Object implements Drawable{
 	
 	private final openihm.interfaces.Graphics g;
 	
-	private int width = 0;
+	private int width;
 	
-	private int height = 0;
+	private int height;
 	
 	public Panel(final openihm.interfaces.Graphics g) {
-		this.g = g;
+		if(g == null) {
+			new NullPointerException(this, 1, new String("g"));
+			this.g = new openihm.interfaces.Graphics() {
+				@Override public void drawPixel(int x, int y, int rgb) {}
+				@Override public void update() {}
+				@Override public int getGraphicsWidth() {return 0;}
+				@Override public int getGraphicsHeight() {return 0;}
+			};
+		}
+		else this.g = g;
+
 	}
 	
 	public Panel(final openihm.interfaces.Graphics g, final int width, final int height) { 

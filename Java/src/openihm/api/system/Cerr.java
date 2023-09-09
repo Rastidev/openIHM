@@ -2,16 +2,11 @@ package openihm.api.system;
 
 
 
-class Cerr extends Ostream {
+class Cerr extends OutPrint {
 
 	@Override
-	public void print(char c) {
+	public void print(byte c) {
 		System.get.print_err(c);
-	}
-
-	@Override
-	public void print(int i) {
-		System.get.print_err(i);
 	}
 
 }

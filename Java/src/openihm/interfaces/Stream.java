@@ -12,13 +12,15 @@ public abstract class Stream {
 	
 	
 	
-	public abstract boolean write(final char c);
+	public abstract boolean write(final byte c);
 	
-	public abstract char read();
+	public abstract byte read();
 	
-	public abstract boolean getCursorPosition(final long pos);
+	public abstract boolean setCursorPosition(final long pos);
 	
 	public abstract int getState();
+	
+	public abstract int available();
 	
 	public abstract boolean close();
 

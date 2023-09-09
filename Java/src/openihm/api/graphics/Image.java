@@ -24,6 +24,13 @@ public class Image {
 				value[i][j] = DefaultColor;
 	}
 	
+	public Image(final Image image) {
+		this(image.width, image.height);
+		for(int i = 0; i < width; i++)
+			for(int j = 0; j < width; j++)
+				value[i][j] = image.value[i][j];
+	}
+
 	public int width() { return width; }
 	
 	public int height() { return height; }

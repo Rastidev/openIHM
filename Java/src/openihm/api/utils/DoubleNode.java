@@ -3,10 +3,10 @@ package openihm.api.utils;
 public class DoubleNode<T> extends Value<T>{
 	
 	// le prochiane noeud
-	private DoubleNode<T> nextNode;
+	private DoubleNode<T> nextNode = null;
 	
 	// le noeud precedent
-	private DoubleNode<T> prevNode;
+	private DoubleNode<T> prevNode = null;
 	
 	//contructeur par defaut
 	public DoubleNode(){};
@@ -19,6 +19,13 @@ public class DoubleNode<T> extends Value<T>{
 	public DoubleNode(final T value){
 		super(value);
 	};
+	
+	//constructeur par copie
+	public DoubleNode(final DoubleNode<T> node){
+		super(node);
+		prevNode = node.prevNode;
+		nextNode = node.nextNode;
+	}
 	
 	/*
 	 * met une valeur et un prochain noeux à ce noeud

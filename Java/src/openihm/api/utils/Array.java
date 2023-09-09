@@ -1,5 +1,6 @@
 package openihm.api.utils;
 
+import openihm.api.lang.String;
 import openihm.api.system.System;
 
 public class Array<T> implements List<T>{
@@ -29,12 +30,12 @@ public class Array<T> implements List<T>{
 	
 	private boolean isBadIndex(final int index) {
 		if(index >= size) {
-			System.cerr.$(String.$("bad index : size=")).$(size);
-			System.cerr.$(String.$(" / index=")).$(index).endl();
+			System.cerr.$(new String("bad index : size=")).$(size);
+			System.cerr.$(new String(" / index=")).$(index).endl();
 			return true;
 		}
 		if(index < 0) {
-			System.cerr.$(String.$("bad index: index < 0 : index =")).$(index).endl();
+			System.cerr.$(new String("bad index: index < 0 : index =")).$(index).endl();
 			return true;
 		}
 		return false;

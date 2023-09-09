@@ -6,7 +6,7 @@ import openihm.interfaces.EventMouseReleased;
 import openihm.interfaces.EventMouseScroll;
 import openihm.interfaces.Root;
 import openihm.api.graphics.Drawable;
-import openihm.api.utils.String;
+import openihm.api.lang.String;
 import openihm.api.view.View;
 
 public class Stage {
@@ -31,7 +31,7 @@ public class Stage {
 		root.setWindowVisible(isVisible);
 		root.setWindowAlwaysOnTop(isAlwaysOnTop);
 		root.setWindowResizable(isResizable);
-		title = String.$("openIHM_API");
+		title = new String("openIHM_API");
 		root.setWindowTitle(title.getValue(), title.size());
 		///////////////////////////
 		root.setMouseMoved(new EventMouseMoved() {
@@ -72,7 +72,7 @@ public class Stage {
 	 * $title @String le nom de la fenetre
 	 */
 	public void setTitle(final String title) { 
-		if(title == null) root.setWindowTitle(new char[0], 0);
+		if(title == null) root.setWindowTitle(new byte[0], 0);
 		else root.setWindowTitle(title.getValue(), title.size());
 		this.title = title;
 	}

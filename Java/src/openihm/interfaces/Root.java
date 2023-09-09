@@ -5,19 +5,19 @@ public abstract class Root implements Context, Arguments, Window, Mouse, Graphic
 	public static final int SUCCESS = 0;
 	public static final int NOTHING = 1;
 	
-	protected Root(final char[][] args, final int device, final int version_language) {
+	protected Root(final byte[][] args, final int device, final int version_language) {
 		this.args = args;
 		this.device = device;
 		this.version_language = version_language;
 	}
 	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-	private final char[][] args;
+	private final byte[][] args;
 	
 	@Override
-	public final char[] getArg(final int ind) {
+	public final byte[] getArg(final int ind) {
 		if(ind < args.length) return args[ind];
-		return new char[] {' '};
+		return new byte[] {' '};
 	}
 	
 	@Override
@@ -32,7 +32,7 @@ public abstract class Root implements Context, Arguments, Window, Mouse, Graphic
 	}
 	
 	@Override
-	public final char[][] getArgs() {
+	public final byte[][] getArgs() {
 		return args;
 	}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,20 +1,20 @@
 package test;
 
-import openihm.api.system.Ostream;
+import openihm.api.lang.String;
+import openihm.api.system.OutPrint;
 import openihm.api.system.System;
 import openihm.api.utils.Iterator;
 import openihm.api.utils.List;
-import openihm.api.utils.String;
 
 class BasicListTest {
 	
 	
 	private final List<Integer> list;
 	
-	private final Ostream cout = System.cout;
-	private final Ostream cerr = System.cerr;
+	private final OutPrint cout = System.cout;
+	private final OutPrint cerr = System.cerr;
 	
-	private static String f(final java.lang.String str) { return String.$(str); }
+	private static String f(final java.lang.String str) { return new String(str); }
 	
 	public BasicListTest(final List<Integer> list) {
 		this.list = list;

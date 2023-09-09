@@ -20,7 +20,7 @@ public interface Window {
 	 * met un nom à la fenetre
 	 * $title @char[] le nom de la fenetre
 	 */
-	public abstract void setWindowTitle(final char[] title, final int size);
+	public abstract void setWindowTitle(final byte[] title, final int size);
 	
 	/*
 	 * met la fenetre visible ou invisible

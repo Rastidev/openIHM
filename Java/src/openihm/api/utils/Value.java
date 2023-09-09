@@ -1,6 +1,8 @@
 package openihm.api.utils;
 
-public class Value<T> {
+import openihm.api.lang.Object;
+
+public class Value<T> extends Object{
 	
 	// la valeur
 	private T value;
@@ -16,6 +18,11 @@ public class Value<T> {
 	public Value(final T value){
 		this.value = value;
 	};
+	
+	//constructeur par copie
+	public Value(final Value<T> i) {
+		value = i.value;
+	}
 	
 	/*
 	 * renvoie @T la valeur

@@ -1,5 +1,8 @@
 package openihm.api.utils;
 
+import openihm.api.exception.BadIndexListException;
+import openihm.api.lang.Object;
+
 public interface List<T> {
 
 	/*
@@ -29,6 +32,10 @@ public interface List<T> {
 	    }
 	    
 	    default boolean insert(final int index, final T e) {
+	    	if(index >= size() || index < 0) {
+	    		new BadIndexListException((Object) this, 1, size(), index);
+	    		return false;
+	    	}
 	    	if(size() == 0 || !resize(size() + 1)) return false;
 	    	final int OldSize = size() - 1;
 	    	for(int i = OldSize - 1; i >= index; i--)
@@ -37,6 +44,10 @@ public interface List<T> {
 	    }
 
 	    default boolean remove(final int index) {
+	    	if(index >= size() || index < 0) {
+	    		new BadIndexListException((Object) this, 2, size(), index);
+	    		return false;
+	    	}
 	    	final int NewSize = size() - 1;
 	    	for(int i = index; i < NewSize; i++) 
 	    		if(!set(i, get(i + 1))) return false;
@@ -87,4 +98,34 @@ public interface List<T> {
 			}
 			return ind;
 		}
+		
+		default boolean containsValue(final T o) {
+			if(o == null) return contains(null);
+			for(final Iterator<T> it = iterator(); !it.isEnd() ; it.next()) 
+				if(((Object) it.get())._eql_((Object) o)) return true;
+			return false;
+		}
+
+		default int indexOfValue(final T o) {
+			if(o == null) return indexOf(null);
+			final Iterator<T> it = iterator();
+			for(int i = 0; !it.isEnd() ; i++) {
+				if(((Object) it.get())._eql_((Object) o)) return i;
+				it.next();
+			}
+			return size();
+		}
+
+		default int lastIndexOfValue(final T o) {
+			if(o == null) return lastIndexOf(null);
+			int ind = size();
+			final Iterator<T> it = iterator();
+			for(int i = 0; !it.isEnd() ; i++) {
+				if(((Object) it.get())._eql_((Object) o)) ind = i;
+				it.next();
+			}
+			return ind;
+		}
+		
+		default boolean clear() { return resize(0); }
 }
